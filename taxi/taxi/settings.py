@@ -130,7 +130,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-AUTH_USER_MODEL = 'trips.User'  # new
+AUTH_USER_MODEL = 'trips.User'
 
 
 REDIS_URL = config('REDIS_URL', 'redis://localhost:6379')
