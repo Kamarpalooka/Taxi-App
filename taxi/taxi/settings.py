@@ -132,3 +132,14 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'trips.User'  # new
 
 
+REDIS_URL = config('REDIS_URL', 'redis://localhost:6379')
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [REDIS_URL],
+            # 'hosts': [("127.0.0.1", 6379)],
+        },
+    },
+}
