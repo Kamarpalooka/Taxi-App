@@ -47,6 +47,9 @@ class TripSerializer(serializers.ModelSerializer):
 
 
 class NestedTripSerializer(serializers.ModelSerializer):
+    """
+    Serializes Trip & Related Models(User)
+    """
     class Meta:
         model = Trip
         fields = '__all__'
