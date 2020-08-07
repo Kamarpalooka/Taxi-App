@@ -1,7 +1,9 @@
 import uuid # new
 from django.contrib.auth.models import AbstractUser
-from django.db import models # new
-from django.shortcuts import reverse # new
+from django.db import models
+from django.shortcuts import reverse
+
+from .choices import STATUSES, REQUESTED
 
 
 class User(AbstractUser):
@@ -9,17 +11,6 @@ class User(AbstractUser):
 
 
 class Trip(models.Model): # new
-    REQUESTED = 'REQUESTED'
-    STARTED = 'STARTED'
-    IN_PROGRESS = 'IN_PROGRESS'
-    COMPLETED = 'COMPLETED'
-    STATUSES = (
-        (REQUESTED, REQUESTED),
-        (STARTED, STARTED),
-        (IN_PROGRESS, IN_PROGRESS),
-        (COMPLETED, COMPLETED),
-    )
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
