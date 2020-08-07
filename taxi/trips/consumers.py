@@ -38,6 +38,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             await self.echo_message(content)
 
     async def create_trip(self, message):
+        # create a trip
         data = message.get('data')
         trip = await self._create_trip(data)
         trip_data = NestedTripSerializer(trip).data
@@ -47,6 +48,12 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             'type': 'echo.message',
             'data': trip_data
         })
+
+        # Add rider to trip group.
+        await self.channel_layer.group_add(
+            group=f'{trip.id}',
+            channel=self.channel_name
+        )
 
         await self.send_json({
             'type': 'echo.message',
