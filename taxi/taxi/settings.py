@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.postgres',  # new
     'django.contrib.staticfiles',
 
-    'channels',  # new
-    'rest_framework',  # new
-    'trips',  # new
+    'channels',
+    'rest_framework',
+    'trips',
 ]
 
 MIDDLEWARE = [
@@ -74,14 +74,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'taxi.wsgi.application'
-ASGI_APPLICATION = 'taxi.routing.application'  # added
+ASGI_APPLICATION = 'taxi.routing.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 
-# changed
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -134,13 +133,12 @@ AUTH_USER_MODEL = 'trips.User'
 
 
 REDIS_URL = config('REDIS_URL', 'redis://localhost:6379')
-
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [REDIS_URL],
-            # 'hosts': [("127.0.0.1", 6379)],
+            # 'hosts': [REDIS_URL],
+            'hosts': [("127.0.0.1", 6379)],
         },
     },
 }

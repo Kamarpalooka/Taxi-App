@@ -9,6 +9,8 @@ from trips.consumers import TaxiConsumer
 
 
 application = ProtocolTypeRouter({
+    # django views are added by default through this router
+
     'websocket': TokenAuthMiddlewareStack(
         URLRouter([
             path('taxi/', TaxiConsumer),
