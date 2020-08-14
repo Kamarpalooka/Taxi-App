@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import datetime
 import os
 from decouple import config
+from corsheaders.defaults import default_headers
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -40,10 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.postgres',  # new
     'django.contrib.staticfiles',
 
+    'corsheaders',
     'channels',
     'rest_framework',
     'trips',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'taxi.urls'
@@ -73,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'taxi.wsgi.application'
+# WSGI_APPLICATION = 'taxi.wsgi.application'
 ASGI_APPLICATION = 'taxi.routing.application'
 
 
@@ -159,3 +164,14 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
     'USER_ID_CLAIM': 'id',
 }
+
+
+# COR HEADERS
+CORS_ALLOW_HEADERS = default_headers + (
+    'Access-Control-Allow-Origin',
+)
+CORS_ORIGIN_ALLOW_ALL = True  # False / True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+)
