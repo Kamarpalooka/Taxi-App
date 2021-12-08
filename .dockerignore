@@ -1,0 +1,8 @@
+# server/.dockerignore
+
+.DS_Store
+.dockerignore
+*.pyc
+__pycache__
+# env
+venv

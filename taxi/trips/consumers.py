@@ -48,10 +48,13 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
         trip_data = NestedTripSerializer(trip).data
 
         # Send rider requests to all drivers.
-        await self.channel_layer.group_send(group='drivers', message={
-            'type': 'echo.message',
-            'data': trip_data
-        })
+        await self.channel_layer.group_send(
+            group='drivers',
+            message={
+                'type': 'echo.message',
+                'data': trip_data
+            }
+        )
 
         # Add rider to "trip group".
         await self.channel_layer.group_add(
@@ -59,6 +62,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             channel=self.channel_name
         )
 
+        # send trip info back to the user
         await self.send_json({
             'type': 'echo.message',
             'data': trip_data,
@@ -112,7 +116,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
             'data': trip_data
         })
 
-        # server sends message back to the rider
+        # server sends message back to WebSocket(user) the rider
         await self.send_json({
             'type': 'echo.message',
             'data': trip_data
@@ -120,6 +124,7 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
 
     async def disconnect(self, code):
         user = self.scope['user']
+
         user_group = await self._get_user_group(user)
         if user_group == 'driver':
             await self.channel_layer.group_discard(
@@ -175,5 +180,4 @@ class TaxiConsumer(AsyncJsonWebsocketConsumer):
     # TODO : The rider can share his trip with another rider, who can join the trip and receive updates.
     # TODO : The server only shares a trip request to drivers in a specific geographic location.
     # TODO : If no drivers accept the request within a certain timespan,
-    #        the server cancels the request and returns a message to the rider.
-    # TODO :
+    # TODO : the server cancels the request and returns a message to the rider.

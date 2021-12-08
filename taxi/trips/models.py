@@ -16,7 +16,7 @@ class User(AbstractUser):
         return groups[0].name if groups else None
 
 
-class Trip(models.Model): # new
+class Trip(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

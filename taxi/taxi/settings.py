@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import datetime
 import os
+import datetime
 from decouple import config
 from corsheaders.defaults import default_headers
 
@@ -23,12 +23,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', '')
+# SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=0)
 
 ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -78,24 +80,29 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'taxi.wsgi.application'
+WSGI_APPLICATION = 'taxi.wsgi.application'
 ASGI_APPLICATION = 'taxi.routing.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-
+# running locally
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('PGDATABASE'),
-        'USER': config('PGUSER'),
-        'PASSWORD': config('PGPASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": config("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": config("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": config("SQL_USER", "user"),
+        "PASSWORD": config("SQL_PASSWORD", "password"),
+        # "HOST": config("SQL_HOST", "localhost"),
+        "HOST": "localhost",
+        "PORT": config("SQL_PORT", "5432"),
     }
 }
+
+# running on docker
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -140,13 +147,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 AUTH_USER_MODEL = 'trips.User'
 
 
-REDIS_URL = config('REDIS_URL', 'redis://localhost:6379')
+REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            # 'hosts': [REDIS_URL],
-            'hosts': [("127.0.0.1", 6379)],
+            'hosts': [REDIS_URL],
+            # 'hosts': [("127.0.0.1", 6379)],
         },
     },
 }
@@ -158,6 +165,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     )
 }
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),

@@ -1,0 +1,15 @@
+venv
+media
+.idea
+
+
+
+**/*.pyc
+**/__pycache__
+
+.DS_Store
+*.sqlite3
+*.env
+
+# Accept these files in the repository
+!.gitignore
